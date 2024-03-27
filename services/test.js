@@ -1,4 +1,3 @@
-
 import fs from 'fs'
 import { utilService } from './util.service.js'
 const toys = utilService.readJsonFile('data/toy.json')
@@ -11,8 +10,9 @@ export const toyService = {
 }
 
 function query(filterBy, sort) {
-    if (!filterBy&& !sort) return Promise.resolve(toys)
 
+    if (!filterBy&& !sort) return Promise.resolve(toys)
+    
     let filteredToys = toys
     if (filterBy.txt) {
         const regExp = new RegExp(filterBy.txt, 'i')
@@ -24,10 +24,10 @@ function query(filterBy, sort) {
         filteredToys = filteredToys.filter(toy =>  labelsToFilter.every(label => toy.labels.includes(label)))
     }
 
-
     if (filterBy.inStock) {
         filteredToys = filteredToys.filter(toy => toy.inStock === JSON.parse(filterBy.inStock))
     }
+
 
     filterBy.maxPrice = (+filterBy.maxPrice) ? +filterBy.maxPrice : Infinity
     filterBy.minPrice = (+filterBy.minPrice) ? +filterBy.minPrice : -Infinity
@@ -35,7 +35,7 @@ function query(filterBy, sort) {
     filteredToys = filteredToys.filter(toy => (toy.price <= filterBy.maxPrice) && (toy.price >= filterBy.minPrice))
 
 
-    if (Object.keys(sort).length) {
+    if (!Object.keys(sort).length) {
 
         filteredToys.sort((toy1, toy2) => {
             const dir = JSON.parse(sort.asc) ? 1 : -1
@@ -43,6 +43,7 @@ function query(filterBy, sort) {
             if (sort.by === 'name') return toy1.name.localeCompare(toy2.name) * dir
         })
     }
+
     return Promise.resolve(filteredToys);
 }
 
