@@ -19,6 +19,11 @@ function query(filterBy, sort) {
         filteredToys = filteredToys.filter(toy => regExp.test(toy.name))
     }
 
+    if (filterBy.labels && filterBy.labels.length) {
+        const labelsToFilter = filterBy.labels.filter(l=>l)
+        filteredToys = filteredToys.filter(toy =>  labelsToFilter.every(label => toy.labels.includes(label)))
+    }
+
 
     if (filterBy.inStock) {
         filteredToys = filteredToys.filter(toy => toy.inStock === JSON.parse(filterBy.inStock))
