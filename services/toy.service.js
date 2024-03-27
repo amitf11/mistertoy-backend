@@ -24,8 +24,6 @@ function query(filterBy, sort) {
         filteredToys = filteredToys.filter(toy => toy.inStock === JSON.parse(filterBy.inStock))
     }
 
-
-
     filterBy.maxPrice = (+filterBy.maxPrice) ? +filterBy.maxPrice : Infinity
     filterBy.minPrice = (+filterBy.minPrice) ? +filterBy.minPrice : -Infinity
 
